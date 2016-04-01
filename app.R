@@ -4,10 +4,9 @@ library(shinydashboard)
 if (!exists("createAssessment", mode = "function"))
   source("assessmentRenderer.R")
 
-##### User Interface ###########################################################
+##### Parameter ################################################################
 title <- "Placeholder"
-assessment1 <- createAssessment(title, "data/ass1.csv")
-print(assessment1)
+assessment1 <- createAssessment("Assessment1", "data/ass1.csv")
 
 ##### User Interface ###########################################################
 ui <- shinyUI(dashboardPage(
@@ -25,6 +24,10 @@ ui <- shinyUI(dashboardPage(
 
 ##### Server ###################################################################
 server <- shinyServer(function(input, output, session) {
+  
+  output$outputAssessment1 <- renderText({
+    "Hello"
+  })
   
 })
 
