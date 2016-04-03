@@ -5,41 +5,57 @@ submitText <- "submitButton"
 
 createAssessment <-
   function(title, file, ..., assessmentIcon = icon("minus")) {
-    data <- read.csv(file, ...)
-    print(data)
+    data <- read.csv(file, na.strings = "NA", header = T, ...)
     sidebar <-
       menuItem(title, tabName = title, icon = assessmentIcon)
     body <- list()
-    answers <- c()
+    mathAnswers <- c()
+    choiceAnswers <- list()
     for (i in 1:length(data$QuestionInputType)) {
       if (data$QuestionInputType[[i]] == "MD") {
-        question <- p(withMathJax(includeMarkdown(data$Question)))
+        question <- withMathJax(p(includeMarkdown(paste(data$Question[[i]]))))
       }else{
-        question <- p(data$Question)
+        question <- p(data$Question[[i]])
       }
       if (data$AnswerType[[i]] == "Math") {
-        answer <- numericInput(inputId = paste(title,i,sep = ""), value = 0, label = "Answer:")
-        answers <- c(answers, data$MathAnswer[[i]])
+        answer <-
+          numericInput(
+            inputId = paste(title,i,sep = "_"), value = 0, label = "Answer:"
+          )
+        mathAnswers <- c(mathAnswers, as.integer(data$MathAnswer[i]))
+        choiceAnswers <- c(choiceAnswers, list(NULL))
       }else{
         answer <-
           radioButtons(
-            inputId = paste(title,i,sep = ""), label = "Answer:",
+            inputId = paste(title,i,sep = "_"), label = "Answer:",
             choices = c(
               paste("A",data$ChoiceA[[i]],sep = ": "),
               paste("B",data$ChoiceB[[i]],sep = ": "),
               paste("C",data$ChoiceC[[i]],sep = ": "),
               paste("D",data$ChoiceD[[i]],sep = ": ")
             ),
-            selected = NULL, inline = F
+            selected = F, inline = F
           )
-        answers <- c(answers, data$ChoiceAnswer[[i]])
+        mathAnswers <- c(mathAnswers, NA)
+        choiceAnswers <-
+          c(choiceAnswers, list(data$ChoiceAnswer[i]))
       }
       body <- c(body, list(question, answer))
     }
-    body <- c(body, submitButton(text = submitText,icon = icon("check")))
-    print(paste("output",title,sep = ""))
-    body <- c(body, htmlOutput(paste("output",title,sep = "")))
-    main <- tabItem(tabName = title, h2(title), div(body))
-    assessment <- list(sidebar, main, answers)
+    body <-
+      c(body, list(submitButton(
+        text = submitText,icon = icon("check")
+      )))
+    body <-
+      c(body, list(br(),br(),htmlOutput(paste(
+        "output",title,sep = ""
+      ))))
+    main <- tabItem(tabName = title, h2(title), body)
+    assessment <-
+      list(
+        sidebar = sidebar, main = main, mathAnswers = mathAnswers, 
+        choiceAnswers = choiceAnswers, answerType = data$AnswerType, 
+        delta = data$MathDelta, title = title
+      )
     return(assessment)
   }

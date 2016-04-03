@@ -1,3 +1,5 @@
-QuestionInputType, Question, AnswerType, MathAnswer, ChoiceAnswer, ChoiceA, ChoiceB, ChoiceC, ChoiceD
-"Text","What is 2+2?","Math",4,NULL,NULL,NULL,NULL,NULL
-"Text","What is 2+2?","Choice",NULL,"A","4","2","3","1"
+QuestionInputType, Question, AnswerType, MathAnswer, MathDelta, ChoiceAnswer, ChoiceA, ChoiceB, ChoiceC, ChoiceD
+"Text","What is 2+2?","Math",4,0,NULL,NULL,NULL,NULL,NULL
+"Text","What is 2+2?","Choice","NA","NA","A","4","2","3","1"
+"Text","What can you do with HTML?","Choice","NA","NA","B","Nothing","Something","What?","HTML?"
+"MD","files/question.md","Math",1.4,0.1,NULL,NULL,NULL,NULL,NULL
