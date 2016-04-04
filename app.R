@@ -7,7 +7,7 @@ if (!exists("createAssessment", mode = "function"))
 ##### Parameter ################################################################
 title <- "Training"
 assessment1 <- createAssessment("Assessment1", "data/ass1.csv", sep = ",",quote = "\"")
-assessment2 <- createAssessment("Distribution", "data/ass2.csv", sep = ",",quote = "\"")
+assessment2 <- createAssessment("Distribution", "data/ass2.csv", sep = ",",quote = "\"", norm.meanlog = 2, norm.sdlog = 2)
 assessment3 <- createAssessment("Placeholder", "data/ass1.csv", sep = ",",quote = "\"")
 assessment4 <- createAssessment("Insert_Title_Here", "data/ass1.csv", sep = ",",quote = "\"")
 assessment5 <- createAssessment("ok", "data/ass1.csv", sep = ",",quote = "\"")
@@ -16,7 +16,7 @@ assessment5 <- createAssessment("ok", "data/ass1.csv", sep = ",",quote = "\"")
 ui <- shinyUI(dashboardPage(
   dashboardHeader(title = title),
   dashboardSidebar(sidebarMenu(assessment1$sidebar,assessment2$sidebar,assessment3$sidebar,assessment4$sidebar,assessment5$sidebar)),
-  dashboardBody(tabItems(assessment1$main,assessment2$main,assessment3$main,assessment4$main,assessment5$main))
+  dashboardBody(withMathJax(tabItems(assessment1$main,assessment2$main,assessment3$main,assessment4$main,assessment5$main)))
 ))
 
 ##### Server ###################################################################

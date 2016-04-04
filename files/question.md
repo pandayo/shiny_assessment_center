@@ -7,4 +7,4 @@ output: html_document
 
 #### Frage
 
-What is $$ \sqrt{2} $$ ?
+What is \\( \sqrt{2} \\)?

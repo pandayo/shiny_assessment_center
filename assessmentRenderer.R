@@ -2,11 +2,9 @@ require(shiny)
 require(shinydashboard)
 
 submitText <- "Submit Solutions"
-norm.meanlog <- 0
-norm.sdlog <- 2
 
 createAssessment <-
-  function(title, file, ..., assessmentIcon = icon("minus")) {
+  function(title, file, ..., assessmentIcon = icon("minus"), norm.meanlog = 0, norm.sdlog = 1) {
     data <- read.csv(file, na.strings = "NA", header = T, ...)
     sidebar <-
       menuItem(title, tabName = title, icon = assessmentIcon)
