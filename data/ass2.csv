@@ -1,0 +1,4 @@
+QuestionInputType, Question, AnswerType, MathAnswer, MathDelta, ChoiceAnswer, ChoiceA, ChoiceB, ChoiceC, ChoiceD
+"Text","What is the standard deviation of the normal distribution?","Math",1.0,0.1,NULL,NULL,NULL,NULL,NULL
+"Text","What is the relationship between standard deviation and variance for the normal distribution?","Choice","NA","NA","A","The standard deviation is the square root of the variance", "The standard deviation is the square of the variance", "Define relationship!", "I don't get the question, sorry :("
+"Text","What is the expected value of the default normal distribution?","Math",0.0,0.01,NULL,NULL,NULL,NULL,NULL

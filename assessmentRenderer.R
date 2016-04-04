@@ -1,7 +1,9 @@
 require(shiny)
 require(shinydashboard)
 
-submitText <- "submitButton"
+submitText <- "Submit Solutions"
+norm.meanlog <- 0
+norm.sdlog <- 2
 
 createAssessment <-
   function(title, file, ..., assessmentIcon = icon("minus")) {
@@ -20,9 +22,9 @@ createAssessment <-
       if (data$AnswerType[[i]] == "Math") {
         answer <-
           numericInput(
-            inputId = paste(title,i,sep = "_"), value = 0, label = "Answer:"
+            inputId = paste(title,i,sep = "_"), value = rlnorm(1,meanlog=norm.meanlog,sdlog=norm.sdlog), label = "Answer:"
           )
-        mathAnswers <- c(mathAnswers, as.integer(data$MathAnswer[i]))
+        mathAnswers <- c(mathAnswers, as.double(data$MathAnswer[i]))
         choiceAnswers <- c(choiceAnswers, list(NULL))
       }else{
         answer <-
