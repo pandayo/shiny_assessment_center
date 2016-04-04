@@ -4,7 +4,7 @@ require(shinydashboard)
 submitText <- "Submit Solutions"
 
 createAssessment <-
-  function(title, file, ..., assessmentIcon = icon("minus"), norm.meanlog = 0, norm.sdlog = 1) {
+  function(title, file, ..., assessmentIcon = icon("minus"), norm.meanlog = 0, norm.sdlog = 1, choice.inline = T, sbs = F) {
     data <- read.csv(file, na.strings = "NA", header = T, ...)
     sidebar <-
       menuItem(title, tabName = title, icon = assessmentIcon)
@@ -13,9 +13,18 @@ createAssessment <-
     choiceAnswers <- list()
     for (i in 1:length(data$QuestionInputType)) {
       if (data$QuestionInputType[[i]] == "MD") {
-        question <- withMathJax(p(includeMarkdown(paste(data$Question[[i]]))))
-      }else{
-        question <- p(data$Question[[i]])
+        if(sbs){
+          question <- withMathJax(div(includeMarkdown(paste(data$Question[[i]])),
+                                    class = "answerquestion"))
+        }else{
+          question <- withMathJax(div(includeMarkdown(paste(data$Question[[i]]))))
+      }}else{
+        if(sbs){
+          question <- p(data$Question[[i]],
+                        class = "answerquestion")
+        }else{
+          question <- p(data$Question[[i]])
+        }
       }
       if (data$AnswerType[[i]] == "Math") {
         answer <-
@@ -34,13 +43,17 @@ createAssessment <-
               paste("C",data$ChoiceC[[i]],sep = ": "),
               paste("D",data$ChoiceD[[i]],sep = ": ")
             ),
-            selected = F, inline = F
+            selected = F, inline = choice.inline
           )
         mathAnswers <- c(mathAnswers, NA)
         choiceAnswers <-
           c(choiceAnswers, list(data$ChoiceAnswer[i]))
       }
-      body <- c(body, list(question, answer))
+      if(sbs == T){
+        body <- c(body, list(div(question, div(answer, class = "answerquestion"), class = "sidebyside")))
+      } else {
+        body <- c(body, list(div(question, answer)))
+      }
     }
     body <-
       c(body, list(submitButton(
