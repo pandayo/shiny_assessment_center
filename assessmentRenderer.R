@@ -4,7 +4,8 @@ require(shinydashboard)
 submitText <- "Submit Solutions"
 
 createAssessment <-
-  function(title, file, ..., assessmentIcon = icon("minus"), norm.meanlog = 0, norm.sdlog = 1, choice.inline = T, sbs = F) {
+  function(title, file, ..., assessmentIcon = icon("minus"), norm.meanlog = 0, 
+           norm.sdlog = 1, choice.inline = T, sbs = F, enable.hints = F) {
     data <- read.csv(file, na.strings = "NA", header = T, ...)
     sidebar <-
       menuItem(title, tabName = title, icon = assessmentIcon)
@@ -13,13 +14,20 @@ createAssessment <-
     choiceAnswers <- list()
     for (i in 1:length(data$QuestionInputType)) {
       if (data$QuestionInputType[[i]] == "MD") {
-        if(sbs){
-          question <- withMathJax(div(includeMarkdown(paste(data$Question[[i]])),
-                                    class = "answerquestion"))
+        if (sbs) {
+          question <-
+            withMathJax(div(includeMarkdown(paste(
+              data$Question[[i]]
+            )),
+            class = "answerquestion"))
         }else{
-          question <- withMathJax(div(includeMarkdown(paste(data$Question[[i]]))))
-      }}else{
-        if(sbs){
+          question <-
+            withMathJax(div(includeMarkdown(paste(
+              data$Question[[i]]
+            ))))
+        }
+      }else{
+        if (sbs) {
           question <- p(data$Question[[i]],
                         class = "answerquestion")
         }else{
@@ -29,7 +37,9 @@ createAssessment <-
       if (data$AnswerType[[i]] == "Math") {
         answer <-
           numericInput(
-            inputId = paste(title,i,sep = "_"), value = rlnorm(1,meanlog=norm.meanlog,sdlog=norm.sdlog), label = "Answer:"
+            inputId = paste(title,i,sep = "_"), 
+            value = rlnorm(1,meanlog = norm.meanlog,sdlog = norm.sdlog), 
+            label = "Answer:"
           )
         mathAnswers <- c(mathAnswers, as.double(data$MathAnswer[i]))
         choiceAnswers <- c(choiceAnswers, list(NULL))
@@ -49,8 +59,26 @@ createAssessment <-
         choiceAnswers <-
           c(choiceAnswers, list(data$ChoiceAnswer[i]))
       }
-      if(sbs == T){
-        body <- c(body, list(div(question, div(answer, class = "answerquestion"), class = "sidebyside")))
+      if (enable.hints) {
+        if (!is.null(data$Hint[[i]])) {
+          if (data$Hint[[i]] != "null" && data$Hint[[i]] != "NULL") {
+            answer <- div(answer, HTML(
+              paste(
+                "<div><div class='button' onclick='changeClass(",'"',
+                paste(title,"hint",i, sep = "_"),'"',
+                ")'>Hint</div><p class='hidden' id=",
+                paste(title,"hint",i, sep = "_"),">",data$Hint[[i]],
+                "</p></div>",sep = ""
+              )
+            ))
+          }
+        }
+      }
+      if (sbs == T) {
+        body <-
+          c(body, list(div(
+            question, div(answer, class = "answerquestion"), class = "sidebyside"
+          )))
       } else {
         body <- c(body, list(div(question, answer)))
       }
@@ -66,8 +94,8 @@ createAssessment <-
     main <- tabItem(tabName = title, h2(title), body)
     assessment <-
       list(
-        sidebar = sidebar, main = main, mathAnswers = mathAnswers, 
-        choiceAnswers = choiceAnswers, answerType = data$AnswerType, 
+        sidebar = sidebar, main = main, mathAnswers = mathAnswers,
+        choiceAnswers = choiceAnswers, answerType = data$AnswerType,
         delta = data$MathDelta, title = title
       )
     return(assessment)
