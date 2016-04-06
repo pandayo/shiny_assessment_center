@@ -1,4 +1,5 @@
 library(shiny)
+library(markdown)
 library(shinydashboard)
 
 if (!exists("createAssessment", mode = "function"))
@@ -53,25 +54,36 @@ ui <- shinyUI(dashboardPage(
 server <- shinyServer(function(input, output, session) {
   output$outputAssessment1 <- renderUI({
     correct <- 0
+    correct.statement <- list()
     for (i in 1:length(assessment1$choiceAnswers)) {
       if (assessment1$answerType[[i]] == "Math") {
         if (abs(as.double(input[[paste(assessment1$title,i,sep = "_")]])
                 - assessment1$mathAnswer[[i]]) <= assessment1$delta[[i]]) {
           correct <- correct + 1
+          correct.statement <- c(correct.statement, correct.math.statement(i, assessment1$mathAnswer[[i]]))
+        }else{
+          correct.statement <- c(correct.statement, correct.statement.text(i, incorrect = T))
         }
       } else {
         if (!is.null(input[[paste(assessment1$title,i,sep = "_")]])) {
           if (substr(input[[paste(assessment1$title,i,sep = "_")]],1,1)
               == assessment1$choiceAnswers[[i]]) {
             correct <- correct + 1
+            correct.statement <- c(correct.statement, correct.statement.text(i))
+          }else{
+            correct.statement <- c(correct.statement, correct.statement.text(i, incorrect = T))
           }
+        }else{
+          correct.statement <- c(correct.statement, correct.statement.text(i, incorrect = T))
         }
       }
     }
-    p(paste(
-      "You have",correct,"of",length(assessment1$mathAnswers),"correct. (",correct *
-        100 / length(assessment1$mathAnswers), "%)"
-    ))
+    return(c(list(p(
+      paste(
+        "You have",correct,"of",length(assessment1$mathAnswers),"correct. (",correct *
+          100 / length(assessment1$mathAnswers), "%)"
+      )
+    )),correct.statement))
   })
   
   output$outputDistribution <- renderUI({
@@ -165,6 +177,27 @@ server <- shinyServer(function(input, output, session) {
         100 / length(assessment5$mathAnswers), "%)"
     ))
   })
+  
+  correct.math.statement <- function(i, answer){
+    return(list(p(
+      paste(
+        "Du hast Frage",i,"korrekt beantwortet. Die exakte Lösung ist",
+        answer,"."
+      )
+    )))
+  }
+  
+  correct.statement.text <- function(i,incorrect = F) {
+    if (incorrect) {
+      return(list(p(
+        paste("Du hast Frage",i,"inkorrekt beantwortet.")
+      )))
+    }else{
+      return(list(p(paste(
+        "Du hast Frage",i,"korrekt beantwortet."
+      ))))
+    }
+  }
   
 })
 

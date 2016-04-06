@@ -1,4 +1,5 @@
 require(shiny)
+require(markdown)
 require(shinydashboard)
 
 submitText <- "Submit Solutions"
@@ -62,15 +63,27 @@ createAssessment <-
       if (enable.hints) {
         if (!is.null(data$Hint[[i]])) {
           if (data$Hint[[i]] != "null" && data$Hint[[i]] != "NULL") {
-            answer <- div(answer, HTML(
-              paste(
-                "<div><div class='button' onclick='changeClass(",'"',
-                paste(title,"hint",i, sep = "_"),'"',
-                ")'>Hint</div><p class='hidden' id=",
-                paste(title,"hint",i, sep = "_"),">",data$Hint[[i]],
-                "</p></div>",sep = ""
-              )
-            ))
+            if(data$HintType[[i]] == "MD"){
+              answer <- div(answer, HTML(
+                paste(
+                  "<div><div class='button' onclick='changeClass(",'"',
+                  paste(title,"hint",i, sep = "_"),'"',
+                  ")'>Hint</div><div class='hidden' id=",
+                  paste(title,"hint",i, sep = "_"),">",includeMarkdown(paste(data$Hint[[i]])),
+                  "</div></div>",sep = ""
+                )
+              ))
+            }else{
+              answer <- div(answer, HTML(
+                paste(
+                  "<div><div class='button' onclick='changeClass(",'"',
+                  paste(title,"hint",i, sep = "_"),'"',
+                  ")'>Hint</div><div class='hidden' id=",
+                  paste(title,"hint",i, sep = "_"),">",data$Hint[[i]],
+                  "</div></div>",sep = ""
+                )
+              ))
+            }
           }
         }
       }
