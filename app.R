@@ -9,12 +9,13 @@ if (!exists("createAssessment", mode = "function"))
 title <- "Training"
 assessment1 <-
   createAssessment(
-    "Assessment1", "data/ass1.csv", sep = ",",quote = "\"", sbs = T
+    "Assessment1", "data/ass1.csv", sep = ",",quote = "\"", sbs = T, subItem = T
   )
 assessment2 <-
   createAssessment(
     "Distribution", "data/ass2.csv", sep = ",",quote = "\"", norm.meanlog = 2,
-    norm.sdlog = 2, choice.inline = F
+    norm.sdlog = 2, choice.inline = F, subItem = T, 
+    assessmentIcon = icon("bar-chart-o")
   )
 assessment3 <-
   createAssessment(
@@ -36,8 +37,9 @@ ui <- shinyUI(dashboardPage(
   dashboardHeader(title = title),
   dashboardSidebar(
     sidebarMenu(
-      assessment1$sidebar,assessment2$sidebar,assessment3$sidebar,
-      assessment4$sidebar,assessment5$sidebar
+      menuItem("Title of Subassessments", icon = icon("minus"),
+               assessment1$sidebar,assessment2$sidebar),
+      assessment3$sidebar,assessment4$sidebar,assessment5$sidebar
     )
   ),
   dashboardBody(tags$head(
@@ -45,7 +47,8 @@ ui <- shinyUI(dashboardPage(
     tags$script(src = "script.js")
   ),withMathJax(
     tabItems(
-      assessment1$main,assessment2$main,assessment3$main,assessment4$main,assessment5$main
+      assessment1$main,assessment2$main,assessment3$main,
+      assessment4$main,assessment5$main
     )
   ))
 ))
@@ -60,21 +63,26 @@ server <- shinyServer(function(input, output, session) {
         if (abs(as.double(input[[paste(assessment1$title,i,sep = "_")]])
                 - assessment1$mathAnswer[[i]]) <= assessment1$delta[[i]]) {
           correct <- correct + 1
-          correct.statement <- c(correct.statement, correct.math.statement(i, assessment1$mathAnswer[[i]]))
+          correct.statement <- c(correct.statement, 
+                                 correct.math.statement(i, assessment1$mathAnswer[[i]]))
         }else{
-          correct.statement <- c(correct.statement, correct.statement.text(i, incorrect = T))
+          correct.statement <- c(correct.statement, 
+                                 correct.statement.text(i, incorrect = T))
         }
       } else {
         if (!is.null(input[[paste(assessment1$title,i,sep = "_")]])) {
           if (substr(input[[paste(assessment1$title,i,sep = "_")]],1,1)
               == assessment1$choiceAnswers[[i]]) {
             correct <- correct + 1
-            correct.statement <- c(correct.statement, correct.statement.text(i))
+            correct.statement <- c(correct.statement, 
+                                   correct.statement.text(i))
           }else{
-            correct.statement <- c(correct.statement, correct.statement.text(i, incorrect = T))
+            correct.statement <- c(correct.statement, 
+                                   correct.statement.text(i, incorrect = T))
           }
         }else{
-          correct.statement <- c(correct.statement, correct.statement.text(i, incorrect = T))
+          correct.statement <- c(correct.statement, 
+                                 correct.statement.text(i, incorrect = T))
         }
       }
     }

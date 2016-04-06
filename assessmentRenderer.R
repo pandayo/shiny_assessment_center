@@ -6,10 +6,16 @@ submitText <- "Submit Solutions"
 
 createAssessment <-
   function(title, file, ..., assessmentIcon = icon("minus"), norm.meanlog = 0, 
-           norm.sdlog = 1, choice.inline = T, sbs = F, enable.hints = F) {
+           norm.sdlog = 1, choice.inline = T, sbs = F, enable.hints = F,
+           subItem = F) {
     data <- read.csv(file, na.strings = "NA", header = T, ...)
-    sidebar <-
-      menuItem(title, tabName = title, icon = assessmentIcon)
+    if(subItem){
+      sidebar <-
+        menuSubItem(title, tabName = title, icon = assessmentIcon)
+    }else{
+      sidebar <-
+        menuItem(title, tabName = title, icon = assessmentIcon)
+    }
     body <- list()
     mathAnswers <- c()
     choiceAnswers <- list()
