@@ -1,5 +1,5 @@
-QuestionInputType, Question, AnswerType, MathAnswer, MathDelta, ChoiceAnswer, ChoiceA, ChoiceB, ChoiceC, ChoiceD, Hint, HintType
-"Text","What is 2+2?","Math",4,0,null,null,null,null,null,null
-"Text","What is 2+2?","Choice","NA","NA","A","4","2","3","1",null
-"Text","What can you do with HTML?","Choice","NA","NA","B","Nothing","Something","What?","HTML?","https://de.wikipedia.org/wiki/Hypertext_Markup_Language","Text"
-"MD","files/question.md","Math",1.4142,0.1,null,null,null,null,null,"files/question.md","MD"
+QuestionInputType, Question, AnswerType, MathAnswer, MathDelta, ChoiceNumber, ChoiceAnswer, ChoiceA, ChoiceB, ChoiceC, ChoiceD, ChoiceE, ChoiceF, Hint, HintType
+"Text","What is 2+2?","Math",4,0,null,null,null,null,null,null,null,null,null
+"Text","What is 2+2?","Choice","NA","NA",5,"A","4","2","3","1","0",null,null,null
+"Text","What can you do with HTML?","Choice","NA","NA",4,"B","Nothing","Something","What?","HTML?",null,null,"https://de.wikipedia.org/wiki/Hypertext_Markup_Language","Text"
+"MD","files/question.md","Math",1.4142,0.1,null,null,null,null,null,null,null,null,"files/question.md","MD"

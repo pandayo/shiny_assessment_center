@@ -5,11 +5,11 @@ require(shinydashboard)
 submitText <- "Submit Solutions"
 
 createAssessment <-
-  function(title, file, ..., assessmentIcon = icon("minus"), norm.meanlog = 0, 
+  function(title, file, ..., assessmentIcon = icon("minus"), norm.meanlog = 0,
            norm.sdlog = 1, choice.inline = T, sbs = F, enable.hints = F,
            subItem = F) {
     data <- read.csv(file, na.strings = "NA", header = T, ...)
-    if(subItem){
+    if (subItem) {
       sidebar <-
         menuSubItem(title, tabName = title, icon = assessmentIcon)
     }else{
@@ -44,15 +44,80 @@ createAssessment <-
       if (data$AnswerType[[i]] == "Math") {
         answer <-
           numericInput(
-            inputId = paste(title,i,sep = "_"), 
-            value = rlnorm(1,meanlog = norm.meanlog,sdlog = norm.sdlog), 
+            inputId = paste(title,i,sep = "_"),
+            value = rlnorm(1,meanlog = norm.meanlog,sdlog = norm.sdlog),
             label = "Answer:"
           )
         mathAnswers <- c(mathAnswers, as.double(data$MathAnswer[i]))
         choiceAnswers <- c(choiceAnswers, list(NULL))
       }else{
-        answer <-
-          radioButtons(
+        if(!is.null(data$ChoiceNumber[[i]])){
+        answer <- switch(as.character(data$ChoiceNumber[[i]]),
+                          "2" = {
+                            radioButtons(
+                              inputId = paste(title,i,sep = "_"), label = "Answer:",
+                              choices = c(
+                                paste("A",data$ChoiceA[[i]],sep = ": "),
+                                paste("B",data$ChoiceB[[i]],sep = ": ")
+                              ),
+                              selected = F, inline = choice.inline
+                            )
+                          },
+                          "3" = {
+                            radioButtons(
+                              inputId = paste(title,i,sep = "_"), label = "Answer:",
+                              choices = c(
+                                paste("A",data$ChoiceA[[i]],sep = ": "),
+                                paste("B",data$ChoiceB[[i]],sep = ": "),
+                                paste("C",data$ChoiceC[[i]],sep = ": ")
+                              ),
+                              selected = F, inline = choice.inline
+                            )
+                          },
+                          "4" = {
+                            radioButtons(
+                              inputId = paste(title,i,sep = "_"), label = "Answer:",
+                              choices = c(
+                                paste("A",data$ChoiceA[[i]],sep = ": "),
+                                paste("B",data$ChoiceB[[i]],sep = ": "),
+                                paste("C",data$ChoiceC[[i]],sep = ": "),
+                                paste("D",data$ChoiceD[[i]],sep = ": ")
+                              ),
+                              selected = F, inline = choice.inline
+                            )
+                          },
+                          "5" = {
+                            radioButtons(
+                              inputId = paste(title,i,sep = "_"), label = "Answer:",
+                              choices = c(
+                                paste("A",data$ChoiceA[[i]],sep = ": "),
+                                paste("B",data$ChoiceB[[i]],sep = ": "),
+                                paste("C",data$ChoiceC[[i]],sep = ": "),
+                                paste("D",data$ChoiceD[[i]],sep = ": "),
+                                paste("E",data$ChoiceE[[i]],sep = ": ")
+                              ),
+                              selected = F, inline = choice.inline
+                            )
+                          },
+                          "6" = {
+                            radioButtons(
+                              inputId = paste(title,i,sep = "_"), label = "Answer:",
+                              choices = c(
+                                paste("A",data$ChoiceA[[i]],sep = ": "),
+                                paste("B",data$ChoiceB[[i]],sep = ": "),
+                                paste("C",data$ChoiceC[[i]],sep = ": "),
+                                paste("D",data$ChoiceD[[i]],sep = ": "),
+                                paste("E",data$ChoiceE[[i]],sep = ": "),
+                                paste("F",data$ChoiceF[[i]],sep = ": ")
+                              ),
+                              selected = F, inline = choice.inline
+                            )
+                          },
+                          {
+                            helpText("No information given!")
+                          })
+        } else {
+          answer <- radioButtons(
             inputId = paste(title,i,sep = "_"), label = "Answer:",
             choices = c(
               paste("A",data$ChoiceA[[i]],sep = ": "),
@@ -62,6 +127,7 @@ createAssessment <-
             ),
             selected = F, inline = choice.inline
           )
+        }
         mathAnswers <- c(mathAnswers, NA)
         choiceAnswers <-
           c(choiceAnswers, list(data$ChoiceAnswer[i]))
@@ -69,7 +135,7 @@ createAssessment <-
       if (enable.hints) {
         if (!is.null(data$Hint[[i]])) {
           if (data$Hint[[i]] != "null" && data$Hint[[i]] != "NULL") {
-            if(data$HintType[[i]] == "MD"){
+            if (data$HintType[[i]] == "MD") {
               answer <- div(answer, HTML(
                 paste(
                   "<div><div class='button' onclick='changeClass(",'"',

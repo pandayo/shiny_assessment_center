@@ -19,7 +19,7 @@ assessment2 <-
   )
 assessment3 <-
   createAssessment(
-    "Placeholder", "data/ass1.csv", sep = ",",quote = "\"", enable.hints = T
+    "Placeholder", "data/ass3.csv", sep = ",",quote = "\"", enable.hints = T
   )
 assessment4 <-
   createAssessment(

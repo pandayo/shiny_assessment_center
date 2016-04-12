@@ -1,0 +1,3 @@
+QuestionInputType, Question, AnswerType, MathAnswer, MathDelta, ChoiceAnswer, ChoiceA, ChoiceB, ChoiceC, ChoiceD, ChoiceE, ChoiceF, Hint, HintType
+"Text","What is 2+2?","Choice","NA","NA","A","4","2","3","1","0",null,null,null
+"Text","What can you do with HTML?","Choice","NA","NA","B","Nothing","Something","What?","HTML?",null,null,"https://de.wikipedia.org/wiki/Hypertext_Markup_Language","Text"
