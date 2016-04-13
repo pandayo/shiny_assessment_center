@@ -4,6 +4,8 @@ library(shinydashboard)
 
 if (!exists("createAssessment", mode = "function"))
   source("assessmentRenderer.R")
+if (!exists("createTextAssessment", mode = "function"))
+  source("assessmentRenderer.R")
 
 ##### Parameter ################################################################
 title <- "Training"
@@ -163,7 +165,7 @@ server <- shinyServer(function(input, output, session) {
     ))
   })
   
-  output$outputok <- renderUI({
+  output$outputTextAssessment <- renderUI({
     correct <- 0
     for (i in 1:length(assessment5$choiceAnswers)) {
       if (assessment5$answerType[[i]] == "Math") {
