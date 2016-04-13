@@ -27,9 +27,9 @@ assessment4 <-
     norm.meanlog = 2, norm.sdlog = 2, choice.inline = F, sbs = T, enable.hints = T
   )
 assessment5 <-
-  createAssessment(
-    "ok", "data/ass1.csv", sep = ",",quote = "\"", choice.inline = F, sbs = T,
-    enable.hints = T
+  createTextAssessment(
+    "TextAssessment", "files/textAssessment1.md", "data/textassessment.csv",
+    sep = ",",quote = "\"", assessmentIcon = icon("file-text-o")
   )
 
 ##### User Interface ###########################################################
